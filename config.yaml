@@ -1,0 +1,9 @@
+next-frame-command: 'xdotool search --name "Windows 10 LTSC \[Running\] \- Oracle VM VirtualBox" windowactivate && sleep 0.1 && xdotool key Down'
+next-frame-command-repeat: 12
+next-frame-wait-time: 1.0
+max-length: 0
+screen:
+  left: 220
+  top: 220
+  width: 2000
+  height: 1400
