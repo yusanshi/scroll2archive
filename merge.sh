@@ -7,6 +7,7 @@
 # ../merge..sh 1.pdf 2.pdf 3.pdf
 
 out_file="combined.pdf"
+out_ocr_file="combined-ocr.pdf"
 bookmarks_file="/tmp/bookmarks.txt"
 bookmarks_fmt="BookmarkBegin
 BookmarkTitle: %s
@@ -14,7 +15,7 @@ BookmarkLevel: 1
 BookmarkPageNumber: %d
 "
 
-rm -f "$bookmarks_file" "$out_file"
+rm -f "$bookmarks_file" "$out_file" "$out_ocr_file"
 
 files=("$@")
 page_counter=1
@@ -30,3 +31,6 @@ done
 # Combine PDFs and embed the generated bookmarks file.
 pdftk "${files[@]}" cat output - | \
     pdftk - update_info "$bookmarks_file" output "$out_file"
+
+# https://github.com/ocrmypdf/OCRmyPDF/issues/715
+ocrmypdf -l eng+chi_sim "$out_file" "$out_ocr_file"
