@@ -103,3 +103,36 @@ html = html.replace('[TITLE]', args.name)
 html = html.replace('[IMG-SRC]', f"{args.name}.png")
 with open(f'output/{args.name}.html', 'w') as f:
     f.write(html)
+
+height = int(image.shape[1] * 297 / 210)  # save A4 paper
+start = 0
+pages = []
+while True:
+    if image.shape[0] - start <= height:
+        pages.append(image[start:])
+        break
+
+    # find the "empty" color at the last half of the page
+    average = image[start + height // 2:start + height].mean(axis=(1, 2))
+    empty = max(average)
+    is_empty = average == empty
+    e = is_empty.nonzero()[0][-1]
+    s = e
+    while s - 1 >= 0 and is_empty[s - 1]:
+        s -= 1
+    taken = (s + e) // 2 + height // 2
+    pages.append(image[start:start + taken])
+    start += taken
+
+# padding each page with (255, 255, 255)
+for i in range(len(pages)):
+    page = np.full((height, image.shape[1], 3), 255, dtype=image.dtype)
+    page[:pages[i].shape[0]] = pages[i]
+    pages[i] = page
+
+pages = [Image.fromarray(x) for x in pages]
+pages[0].save(f'output/{args.name}.pdf',
+              save_all=True,
+              append_images=pages[1:],
+              resolution=200,
+              quality=95)
