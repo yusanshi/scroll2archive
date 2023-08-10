@@ -125,6 +125,7 @@ while True:
     start += taken
 
 # padding each page with (255, 255, 255)
+# TODO: what if the page has a dark background?
 for i in range(len(pages)):
     page = np.full((height, image.shape[1], 3), 255, dtype=image.dtype)
     page[:pages[i].shape[0]] = pages[i]

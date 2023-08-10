@@ -1,9 +1,21 @@
+# command to scroll down: focus on the target window and press key Down
 next-frame-command: 'xdotool search --name "Windows 10 LTSC \[Running\] \- Oracle VM VirtualBox" windowactivate && sleep 0.1 && xdotool key Down'
+# may repeat the command multiple times so that there is less overlap between two frames
 next-frame-command-repeat: 12
+# give it some time to respond :)
 next-frame-wait-time: 1.0
+# max limit for the number of frames
+# set this to -1 or 0 to disable the limit, in this way, the script will keep scrolling and taking frames until scrolling to the bottom (i.e., when two frames are the same)
 max-length: 0
+# the coordinates for taking screenshots
+# TODO: don't write the coordinates here, instread, select the area with a mouse
 screen:
   left: 220
   top: 220
   width: 2000
   height: 1400
+#
+# When running the script, the first two frames are saved as `images/first.png` and `images/second.png`.
+# Please use them to tweak `next-frame-command*` and `screen`.
+# Ideally, `first.png` and `second.png` should have less overlap (but need some overlap for later stitching process).
+
